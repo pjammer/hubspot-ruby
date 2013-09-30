@@ -71,7 +71,16 @@ module Hubspot
           nil
         end
       end
-
+      # GET  /contacts/v1/fields/:form_guid
+      def find_form_fields(guid)
+        url = Hubspot::Utils.generate_url("/contacts/v1/fields/:form_guid", {form_guid: guid})
+        resp = HTTParty.get(url, format: :json)
+        if resp.success?
+          resp.body
+        else
+          nil
+        end
+      end
       # TODO: Get all contacts
       # {https://developers.hubspot.com/docs/methods/contacts/get_contacts}
       # @param count [Fixnum] number of contacts per page; max 100
