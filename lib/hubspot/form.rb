@@ -13,7 +13,7 @@ module Hubspot
     def submit!(email, params={})
       params_with_email = params.stringify_keys.merge("email" => email)
       post_data = {properties: Hubspot::Utils.hash_to_properties(params_with_email)}
-      resp = HTTParty.post(url, body: post_data)
+      resp = HTTParty.post(url, body: post_data, headers: {"Content-type" => "application/x-www-form-urlencoded"})
       raise(Hubspot::ContactExistsError.new(resp, "Form GUID is not correct")) if resp.code == 404
       raise(Hubspot::RequestError.new(resp, "Form submission was not submitted successfully")) unless resp.success?
       resp.code #Hubspot::Contact.new(resp.parsed_response)
