@@ -10,9 +10,8 @@ module Hubspot
     # 204 when the form submissions is sucessful
     # 404 when the Form GUID is not found for the provided Portal ID
     # 500 when an internal server error occurs
-    def submit!(email, params={})
-      params_with_email = params.stringify_keys.merge("email" => email)
-      resp = HTTParty.post(url, body: params_with_email)
+    def submit!(params={})
+      resp = HTTParty.post(url, body: params)
       raise(Hubspot::ContactExistsError.new(resp, "Form GUID is not correct")) if resp.code == 404
       raise(Hubspot::RequestError.new(resp, "Form submission was not submitted successfully")) unless resp.success?
       resp.code #Hubspot::Contact.new(resp.parsed_response)
